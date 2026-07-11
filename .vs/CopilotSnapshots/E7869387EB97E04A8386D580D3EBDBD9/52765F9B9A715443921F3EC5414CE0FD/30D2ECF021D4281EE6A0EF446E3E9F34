@@ -1,0 +1,12 @@
+﻿{
+   "ConnectionStrings": {
+     "DefaultConnection": "Server=IN-MANAS-ARORA-\\SQLEXPRESS;Database=AuthDb;User Id=sa;Password=Cyber1234;TrustServerCertificate=True;MultipleActiveResultSets=true"
+   },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}
