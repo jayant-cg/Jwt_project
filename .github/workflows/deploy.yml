@@ -32,3 +32,4 @@ jobs:
           sudo systemctl restart userauthapi
 
           EOF
+
