@@ -1,0 +1,15 @@
+- name: Deploy via Git Pull
+  run: |
+    ssh -i ~/.ssh/ec2.pem \
+    ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+
+      cd /home/ubuntu/UserAuthApi
+
+      git pull origin main
+
+      dotnet restore
+      dotnet publish -c Release -o /var/www/userauthapi
+
+      sudo systemctl restart userauthapi
+
+    EOF

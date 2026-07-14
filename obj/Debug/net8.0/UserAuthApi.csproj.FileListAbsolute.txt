@@ -438,3 +438,4 @@ C:\Users\JayantMohanMishra\OneDrive - CG Infinity\Desktop\Arsh_Project\obj\Debug
 C:\Users\JayantMohanMishra\OneDrive - CG Infinity\Desktop\Arsh_Project\obj\Debug\net8.0\UserAuthApi.pdb
 C:\Users\JayantMohanMishra\OneDrive - CG Infinity\Desktop\Arsh_Project\obj\Debug\net8.0\UserAuthApi.genruntimeconfig.cache
 C:\Users\JayantMohanMishra\OneDrive - CG Infinity\Desktop\Arsh_Project\obj\Debug\net8.0\ref\UserAuthApi.dll
+C:\Users\JayantMohanMishra\OneDrive - CG Infinity\Desktop\Arsh_Project\obj\Debug\net8.0\UserAuthApi.sourcelink.json
