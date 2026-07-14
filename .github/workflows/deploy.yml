@@ -1,15 +1,34 @@
-- name: Deploy via Git Pull
-  run: |
-    ssh -i ~/.ssh/ec2.pem \
-    ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+name: Deploy ASP.NET Core API
 
-      cd /home/ubuntu/UserAuthApi
+on:
+  push:
+    branches:
+      - main
 
-      git pull origin main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-      dotnet restore
-      dotnet publish -c Release -o /var/www/userauthapi
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/ec2.pem
+          chmod 600 ~/.ssh/ec2.pem
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      sudo systemctl restart userauthapi
+      - name: Deploy via Git Pull
+        run: |
+          ssh -i ~/.ssh/ec2.pem \
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
 
-    EOF
+          cd /home/ubuntu/Jwt_project
+
+          git pull origin main
+
+          dotnet restore
+          dotnet publish -c Release -o /var/www/userauthapi
+
+          sudo systemctl restart userauthapi
+
+          EOF
