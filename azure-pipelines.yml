@@ -6,74 +6,31 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  azureSubscription: 'BOOTCAMP-SC'
-  appServiceName: 'Jwt-Project'
 
-stages:
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.0.x'
 
-- stage: Build
-  displayName: Build
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
 
-  jobs:
-  - job: Build
-    displayName: Build Application
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
 
-    steps:
-    - task: UseDotNet@2
-      displayName: Install .NET SDK
-      inputs:
-        packageType: 'sdk'
-        version: '8.0.x'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
-    - task: DotNetCoreCLI@2
-      displayName: Restore Packages
-      inputs:
-        command: 'restore'
-        projects: '**/*.csproj'
-
-    - task: DotNetCoreCLI@2
-      displayName: Build Project
-      inputs:
-        command: 'build'
-        projects: '**/*.csproj'
-        arguments: '--configuration $(buildConfiguration)'
-
-    - task: DotNetCoreCLI@2
-      displayName: Publish Project
-      inputs:
-        command: 'publish'
-        publishWebProjects: true
-        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-        zipAfterPublish: true
-
-    - task: PublishBuildArtifacts@1
-      displayName: Publish Artifact
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop'
-
-- stage: Deploy
-  displayName: Deploy
-
-  dependsOn: Build
-
-  jobs:
-  - deployment: DeployWebApp
-    displayName: Deploy to Azure App Service
-    environment: Production
-
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-
-          - download: current
-            artifact: drop
-
-          - task: AzureWebApp@1
-            displayName: Deploy Jwt-Project
-            inputs:
-              azureSubscription: '$(azureSubscription)'
-              appType: 'webApp'
-              appName: '$(appServiceName)'
-              package: '$(Pipeline.Workspace)/drop/**/*.zip'
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
